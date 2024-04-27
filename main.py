@@ -3,15 +3,30 @@ import random
 import time
 import copy
 
-WINDOW_WIDTH, WINDOW_HEIGHT = 800, 800
+WINDOW_WIDTH, WINDOW_HEIGHT = 700, 700
 BLOCK_SIZE = WINDOW_WIDTH // 4
 BLACK, WHITE, GREEN, RED = (0, 0, 0), (255, 255, 255), (0, 255, 0), (255, 0, 0)
 LINES, TILES = (185, 173, 161), (202, 193, 181)
+WHITE_TILE = (248, 246, 242)
+BLACK_TILE = (117, 110, 102)
 pygame.init()
-FONT = pygame.font.Font("Helvetica.ttf", 64)
+FONT = pygame.font.Font("ClearSans-Bold.ttf", 64)
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
 running = True
+colors = {
+    2: (238, 228, 218),
+    4: (237, 224, 200),
+    8:(242, 177, 121),
+    16:(245, 149, 99),
+    32:(246, 124, 95),
+    64:(246, 94, 59),
+    128:(237, 207, 114),
+    256:(237, 204, 97),
+    512:(237, 200, 80),
+    1024:(237, 197, 63),
+    2048:(237, 194, 46),
+}
 class Block():
     def __init__(self, val: int, position=None) -> None:
         self.val = val
@@ -22,10 +37,13 @@ class Block():
         self.prev_position = None
     def draw_block(self):
         if self.val != 0: 
+            color = colors.get(self.val)
+            color = color if color else BLACK
+            text_color = BLACK_TILE if self.val <= 4 else WHITE_TILE
             rect = pygame.rect.Rect(self.position.x * BLOCK_SIZE, self.position.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
-            pygame.draw.rect(screen, WHITE, rect)
+            pygame.draw.rect(screen, color, rect)
             val = str(self.val)
-            text = FONT.render(val, True, BLACK, WHITE)
+            text = FONT.render(val, True, text_color, color)
             text_rect = text.get_rect()
             text_rect.center = (self.position.x * BLOCK_SIZE + BLOCK_SIZE // 2, self.position.y * BLOCK_SIZE + BLOCK_SIZE // 2)      
             screen.blit(text, text_rect)
