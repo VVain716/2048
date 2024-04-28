@@ -1,6 +1,6 @@
 row = [0,0,4,2]
 
-
+class Block()
 
 def left():
     count = 0
